@@ -1,17 +1,14 @@
 # OrbitDB Types
-Basé sur l'[original](https://github.com/orbitdb/orbit-db-types).
-Based on the [original](https://github.com/orbitdb/orbit-db-types).
-
 [![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/orbitdb/Lobby) [![Matrix](https://img.shields.io/badge/matrix-%23orbitdb%3Apermaweb.io-blue.svg)](https://riot.permaweb.io/#/room/#orbitdb:permaweb.io)
 
-This repository contains unofficial typescript definitons for [OrbitDB](https://github.com/orbitdb/orbit-db).
+This repository contains official TypeScript definitons for [OrbitDB](https://github.com/orbitdb/orbit-db).
 
 # Install
 
 Install this package from npm:
 
 ```sh
-$ pnpm i @constl/orbit-db-types
+$ pnpm i @orbitdb/orbit-db-types
 ```
 
 # Contributing
