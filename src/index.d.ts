@@ -6,13 +6,13 @@ declare module "@orbitdb/core" {
   import type { PrivateKey } from "@libp2p/interface";
   import type { CID } from "multiformats";
 
-  export type createOrbitDB = <T extends Libp2p = Libp2p>(args: {
+  export function createOrbitDB<T extends Libp2p = Libp2p>(args: {
     ipfs: HeliaLibp2p<T>;
     id?: string;
     identity?: Identity;
     identities?: IdentitiesType;
     directory?: string;
-  }) => Promise<OrbitDB>;
+  }): Promise<OrbitDB>;
 
   export type DatabaseEvents = {
     update: (entry: LogEntry) => void;
@@ -55,9 +55,9 @@ declare module "@orbitdb/core" {
     access: AccessController;
   };
 
-  export type Documents = <T extends string = "_id">(args?: {
+  export function Documents<T extends string = "_id">(args?: {
     indexBy: T;
-  }) => (args: CreateDatabaseArgs) => Promise<
+  }): (args: CreateDatabaseArgs) => Promise<
     BaseDatabase & {
       type: "documents";
       put: (doc: { [key: string]: string }) => Promise<void>;
@@ -77,9 +77,9 @@ declare module "@orbitdb/core" {
     }
   >;
 
-  export type DocumentsDatabase = ReturnType<Awaited<ReturnType<Documents>>>;
+  export type DocumentsDatabase = Awaited<ReturnType<Awaited<ReturnType<typeof Documents>>>>;
 
-  export type KeyValue = () => (args: CreateDatabaseArgs) => Promise<
+  export function KeyValue(): (args: CreateDatabaseArgs) => Promise<
     BaseDatabase & {
       type: "keyvalue";
       put(key: string, value: unknown): Promise<string>;
@@ -90,9 +90,18 @@ declare module "@orbitdb/core" {
     }
   >;
 
-  export type KeyValueIndexed = KeyValue;
+  export function KeyValueIndexed(): (args: CreateDatabaseArgs) => Promise<
+    BaseDatabase & {
+      type: "keyvalue";
+      put(key: string, value: unknown): Promise<string>;
+      set(key: string, value: unknown): Promise<string>;
+      del(key: string): Promise<string>;
+      get(key: string): Promise<unknown | undefined>;
+      all(): Promise<{ key: string; value: unknown; hash: string }[]>;
+    }
+  >;
 
-  export type KeyValueDatabase = ReturnType<Awaited<ReturnType<KeyValue>>>;
+  export type KeyValueDatabase = Awaited<ReturnType<Awaited<ReturnType<typeof KeyValue>>>>;
 
   export function Database(args: CreateDatabaseArgs): Promise<BaseDatabase>;
 
@@ -139,14 +148,14 @@ declare module "@orbitdb/core" {
     peerId: PeerId;
   };
 
-  export type useAccessController = (
+  export function useAccessController(
     accessController: AccessController,
-  ) => void;
+  ): void;
 
-  export type parseAddress = (
+  export function parseAddress(
     address: OrbitDBAddress | string,
-  ) => OrbitDBAddress;
-  export type isValidAddress = (address: unknown) => boolean;
+  ): OrbitDBAddress;
+  export function isValidAddress(address: unknown): boolean;
 
   export type OrbitDBAddress = {
     protocol: string;
@@ -184,7 +193,7 @@ declare module "@orbitdb/core" {
     peers: Set<string>;
   };
 
-  export type AccessControllerGenerator = ({
+  export function AccessControllerGenerator({
     orbitdb,
     identities,
     address,
@@ -192,7 +201,7 @@ declare module "@orbitdb/core" {
     orbitdb: OrbitDB;
     identities: IdentitiesType;
     address?: string;
-  }) => Promise<AccessController>;
+  }): Promise<AccessController>;
 
   export type AccessController = {
     type: string;
@@ -200,12 +209,12 @@ declare module "@orbitdb/core" {
     canAppend: (entry: LogEntry) => Promise<boolean>;
   };
 
-  export type useDatabaseType = (type: { type: string }) => void;
+  export function useDatabaseType(type: { type: string }): void;
 
-  export type IPFSAccessController = (args?: {
+  export function IPFSAccessController(args?: {
     write?: string[];
     storage?: Storage;
-  }) => (args: {
+  }): (args: {
     orbitdb: OrbitDB;
     identities: IdentitiesType;
     address: string;
@@ -216,9 +225,9 @@ declare module "@orbitdb/core" {
     }
   >;
 
-  export type OrbitDBAccessController = (args?: {
+  export function OrbitDBAccessController(args?: {
     write?: string[];
-  }) => (args: {
+  }): (args: {
     orbitdb: OrbitDB;
     identities: IdentitiesType;
     address: string;
@@ -237,12 +246,12 @@ declare module "@orbitdb/core" {
     }
   >;
 
-  export type Identities = (args: {
+  export function Identities(args: {
     keystore?: KeyStoreType;
     path?: string;
     storage?: Storage;
     ipfs?: HeliaLibp2p;
-  }) => Promise<{
+  }): Promise<{
     createIdentity: (options: object) => Promise<Identity>;
     getIdentity: (hash: string) => Promise<Identity>;
     verifyIdentity: (identity: Identity) => Promise<boolean>;
@@ -255,7 +264,7 @@ declare module "@orbitdb/core" {
     keystore: KeyStoreType;
   }>;
 
-  export type IdentitiesType = Awaited<ReturnType<Identities>>;
+  export type IdentitiesType = Awaited<ReturnType<typeof Identities>>;
 
   export type Entry = {
     create: (
@@ -276,13 +285,13 @@ declare module "@orbitdb/core" {
     put: (hash: string, data: DagCborEncodable) => Promise<void>; // Todo: check if DagCborEncodable is appropriate here
     get: (hash: string) => Promise<void>;
   };
-  export type IPFSBlockStorage = (args: {
+  export function IPFSBlockStorage(args: {
     ipfs: HeliaLibp2p;
     pin?: boolean;
     timeout?: number;
-  }) => Promise<Storage>;
-  export type LRUStorage = (args: { size: number }) => Promise<Storage>;
-  export type ComposedStorage = (...args: Storage[]) => Promise<Storage>;
+  }): Promise<Storage>;
+  export function LRUStorage(args: { size: number }): Promise<Storage>;
+  export function ComposedStorage(...args: Storage[]): Promise<Storage>;
 
   export type Clock = {
     id: string;
@@ -304,12 +313,10 @@ declare module "@orbitdb/core" {
     hash: string;
   };
 
-  export type KeyStore = (args: {
+  export function KeyStore(args: {
     storage?: Storage;
     path?: string;
-  }) => Promise<KeyStoreType>;
-
-  export type KeyStoreType = {
+  }): Promise<{
     clear: () => Promise<void>;
     close: () => Promise<void>;
     hasKey: (id: string) => Promise<boolean>;
@@ -320,5 +327,7 @@ declare module "@orbitdb/core" {
       keys: PrivateKey,
       options?: { format: T },
     ) => Promise<T extends "hex" ? string : Uint8Array>;
-  };
+  }>;
+
+  export type KeyStoreType = Awaited<ReturnType<typeof KeyStore>>;
 }
