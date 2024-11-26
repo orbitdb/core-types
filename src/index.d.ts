@@ -4,7 +4,7 @@ declare module "@orbitdb/core" {
   import type { PeerId } from "@libp2p/interface";
   import type { TypedEmitter } from "tiny-typed-emitter";
   import type { PrivateKey } from "@libp2p/interface";
-  import type { CID } from "multiformats";
+  import type { ByteView, CID } from "multiformats";
 
   export function createOrbitDB<T extends Libp2p = Libp2p<DefaultLibp2pServices>>(args: {
     ipfs: HeliaLibp2p<T>;
@@ -270,24 +270,24 @@ declare module "@orbitdb/core" {
 
   export type IdentitiesType = Awaited<ReturnType<typeof Identities>>;
 
-  export type Entry = {
-    create: (
+  export namespace Entry {
+    function create (
       identity: Identity,
       id: string,
       payload: unknown,
       clock?: Clock,
       next?: string[],
       refs?: string[],
-    ) => Promise<LogEntry>;
-    verify: (identities: IdentitiesType, entry: LogEntry) => Promise<boolean>;
-    decode: (bytes: Uint8Array) => Promise<LogEntry>;
-    isEntry: (obj: object) => boolean;
-    isEqual: (a: LogEntry, b: LogEntry) => boolean;
-  };
+    ): Promise<LogEntry>;
+    function verify (identities: IdentitiesType, entry: LogEntry): Promise<boolean>;
+    function decode (bytes: Uint8Array): Promise<LogEntry>;
+    function isEntry (obj: object): boolean;
+    function isEqual (a: LogEntry, b: LogEntry): boolean;
+  }
 
   export type Storage = {
     put: (hash: string, data: unknown) => Promise<void>; // Todo: check if DagCborEncodable is appropriate here
-    get: (hash: string) => Promise<unknown>;
+    get: (hash: string) => Promise<ByteView<unknown>>;
   };
   export function IPFSBlockStorage<T extends Libp2p = Libp2p<DefaultLibp2pServices>>(args: {
     ipfs: HeliaLibp2p<T>;
