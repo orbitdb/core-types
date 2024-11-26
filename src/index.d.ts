@@ -24,7 +24,7 @@ declare module "@orbitdb/core" {
 
   export type MetaData = { [key: string]: string | number | boolean }; // Todo: check
 
-  type  OpenDatabaseArgs = Partial<{
+  type OpenDatabaseArgs = Partial<{
     type: string;
     meta: MetaData;
     sync: boolean;
