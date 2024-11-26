@@ -125,14 +125,14 @@ declare module "@orbitdb/core" {
     ) => Promise<boolean>;
   };
 
-  export type OrbitDB = {
+  export type OrbitDB<T extends Libp2p = Libp2p> = {
     id: string;
     open: (
       address: string,
       options?: CreateDatabaseArgs,
     ) => ReturnType<typeof Database>;
     stop: () => Promise<void>;
-    ipfs: HeliaLibp2p;
+    ipfs: HeliaLibp2p<T>;
     directory: string;
     keystore: KeyStoreType;
     identities: IdentitiesType;
