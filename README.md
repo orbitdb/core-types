@@ -8,7 +8,7 @@ This repository contains official TypeScript definitons for [OrbitDB](https://gi
 Install this package from npm:
 
 ```sh
-$ pnpm i @orbitdb/orbit-db-types
+$ pnpm i @orbitdb/core-types
 ```
 
 # Contributing
