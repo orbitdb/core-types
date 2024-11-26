@@ -26,7 +26,7 @@ declare module "@orbitdb/core" {
 
   export type MetaData = { [key: string]: string | number | boolean }; // Todo: check
 
-  type OpenDatabaseArgs = Partial<{
+  type OpenDatabaseOptions = Partial<{
     type: string;
     meta: MetaData;
     sync: boolean;
@@ -38,21 +38,22 @@ declare module "@orbitdb/core" {
     referencesCount: number;
   }>;
 
-  type CreateDatabaseArgs<T extends Libp2p = Libp2p<DefaultLibp2pServices>> = {
-    ipfs: HeliaLibp2p<T>;
-    identity?: Identity;
-    address: string;
-    name?: string;
-    access?: AccessController;
-    directory?: string;
-    meta?: MetaData;
-    headsStorage?: Storage;
-    entryStorage?: Storage;
-    indexStorage?: Storage;
-    referencesCount?: number;
-    syncAutomatically?: boolean;
-    onUpdate?: (log: Log, entry: LogEntry) => void;
-  };
+  type CreateDatabaseOptions<T extends Libp2p = Libp2p<DefaultLibp2pServices>> =
+    {
+      ipfs: HeliaLibp2p<T>;
+      identity?: Identity;
+      address: string;
+      name?: string;
+      access?: AccessController;
+      directory?: string;
+      meta?: MetaData;
+      headsStorage?: Storage;
+      entryStorage?: Storage;
+      indexStorage?: Storage;
+      referencesCount?: number;
+      syncAutomatically?: boolean;
+      onUpdate?: (log: Log, entry: LogEntry) => void;
+    };
 
   export type BaseDatabase = {
     address: string;
@@ -69,11 +70,11 @@ declare module "@orbitdb/core" {
     access: AccessController;
   };
 
-  export type DatabaseGenerator = (args: CreateDatabaseArgs) => BaseDatabase;
+  export type DatabaseGenerator = (args: CreateDatabaseOptions) => BaseDatabase;
 
   export function Documents<T extends string = "_id">(args?: {
     indexBy: T;
-  }): (args: CreateDatabaseArgs) => Promise<
+  }): (args: CreateDatabaseOptions) => Promise<
     BaseDatabase & {
       type: "documents";
       put: (doc: { [key: string]: string }) => Promise<void>;
@@ -97,7 +98,7 @@ declare module "@orbitdb/core" {
     ReturnType<Awaited<ReturnType<typeof Documents>>>
   >;
 
-  export function KeyValue(): (args: CreateDatabaseArgs) => Promise<
+  export function KeyValue(): (args: CreateDatabaseOptions) => Promise<
     BaseDatabase & {
       type: "keyvalue";
       put(key: string, value: unknown): Promise<string>;
@@ -108,7 +109,7 @@ declare module "@orbitdb/core" {
     }
   >;
 
-  export function KeyValueIndexed(): (args: CreateDatabaseArgs) => Promise<
+  export function KeyValueIndexed(): (args: CreateDatabaseOptions) => Promise<
     BaseDatabase & {
       type: "keyvalue";
       put(key: string, value: unknown): Promise<string>;
@@ -123,7 +124,7 @@ declare module "@orbitdb/core" {
     ReturnType<Awaited<ReturnType<typeof KeyValue>>>
   >;
 
-  export function Database(args: CreateDatabaseArgs): Promise<BaseDatabase>;
+  export function Database(args: CreateDatabaseOptions): Promise<BaseDatabase>;
 
   export type Identity = {
     id: string;
@@ -145,7 +146,7 @@ declare module "@orbitdb/core" {
     id: string;
     open: (
       address: string,
-      options?: OpenDatabaseArgs,
+      options?: OpenDatabaseOptions,
     ) => ReturnType<typeof Database>;
     stop: () => Promise<void>;
     ipfs: HeliaLibp2p<T>;
@@ -201,15 +202,14 @@ declare module "@orbitdb/core" {
     peers: Set<string>;
   };
 
-  export function AccessControllerGenerator({
-    orbitdb,
-    identities,
-    address,
-  }: {
+  export function AccessControllerGenerator(args: {
+    write: string[];
+    storage: Storage;
+  }): (args: {
     orbitdb: OrbitDB;
     identities: IdentitiesType;
     address?: string;
-  }): Promise<AccessController>;
+  }) => Promise<AccessController>;
 
   export type AccessController = {
     type: string;
