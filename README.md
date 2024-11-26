@@ -17,5 +17,4 @@ Contributions are welcome. :)
 
 # License
 
-
 [MIT](LICENSE) © 2018+ Łukasz Mariański, Julien Malard-Adam and other contributors
