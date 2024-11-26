@@ -77,7 +77,9 @@ declare module "@orbitdb/core" {
     }
   >;
 
-  export type DocumentsDatabase = Awaited<ReturnType<Awaited<ReturnType<typeof Documents>>>>;
+  export type DocumentsDatabase = Awaited<
+    ReturnType<Awaited<ReturnType<typeof Documents>>>
+  >;
 
   export function KeyValue(): (args: CreateDatabaseArgs) => Promise<
     BaseDatabase & {
@@ -101,7 +103,9 @@ declare module "@orbitdb/core" {
     }
   >;
 
-  export type KeyValueDatabase = Awaited<ReturnType<Awaited<ReturnType<typeof KeyValue>>>>;
+  export type KeyValueDatabase = Awaited<
+    ReturnType<Awaited<ReturnType<typeof KeyValue>>>
+  >;
 
   export function Database(args: CreateDatabaseArgs): Promise<BaseDatabase>;
 
@@ -148,9 +152,7 @@ declare module "@orbitdb/core" {
     peerId: PeerId;
   };
 
-  export function useAccessController(
-    accessController: AccessController,
-  ): void;
+  export function useAccessController(accessController: AccessController): void;
 
   export function parseAddress(
     address: OrbitDBAddress | string,
@@ -225,9 +227,7 @@ declare module "@orbitdb/core" {
     }
   >;
 
-  export function OrbitDBAccessController(args?: {
-    write?: string[];
-  }): (args: {
+  export function OrbitDBAccessController(args?: { write?: string[] }): (args: {
     orbitdb: OrbitDB;
     identities: IdentitiesType;
     address: string;
