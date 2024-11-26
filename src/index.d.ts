@@ -36,8 +36,8 @@ declare module "@orbitdb/core" {
     referencesCount: number;
   }>;
 
-  type CreateDatabaseArgs = {
-    ipfs: HeliaLibp2p;
+  type CreateDatabaseArgs<T extends Libp2p = Libp2p> = {
+    ipfs: HeliaLibp2p<T>;
     identity?: Identity;
     address: string;
     name?: string;
@@ -250,11 +250,11 @@ declare module "@orbitdb/core" {
     }
   >;
 
-  export function Identities(args: {
+  export function Identities<T extends Libp2p = Libp2p>(args: {
     keystore?: KeyStoreType;
     path?: string;
     storage?: Storage;
-    ipfs?: HeliaLibp2p;
+    ipfs?: HeliaLibp2p<T>;
   }): Promise<{
     createIdentity: (options: object) => Promise<Identity>;
     getIdentity: (hash: string) => Promise<Identity>;
@@ -289,8 +289,8 @@ declare module "@orbitdb/core" {
     put: (hash: string, data: unknown) => Promise<void>; // Todo: check if DagCborEncodable is appropriate here
     get: (hash: string) => Promise<unknown>;
   };
-  export function IPFSBlockStorage(args: {
-    ipfs: HeliaLibp2p;
+  export function IPFSBlockStorage<T extends Libp2p = Libp2p>(args: {
+    ipfs: HeliaLibp2p<T>;
     pin?: boolean;
     timeout?: number;
   }): Promise<Storage>;
