@@ -1,6 +1,6 @@
 {
   "name": "@orbitdb/core-types",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Official typings for OrbitDB",
   "types": "src/index.d.ts",
   "type": "module",
