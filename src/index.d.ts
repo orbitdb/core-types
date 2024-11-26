@@ -1,12 +1,12 @@
 declare module "@orbitdb/core" {
-  import type { HeliaLibp2p } from "helia";
+  import type { DefaultLibp2pServices, HeliaLibp2p } from "helia";
   import type { Libp2p } from "@libp2p/interface";
   import type { PeerId } from "@libp2p/interface";
   import type { TypedEmitter } from "tiny-typed-emitter";
   import type { PrivateKey } from "@libp2p/interface";
   import type { CID } from "multiformats";
 
-  export function createOrbitDB<T extends Libp2p = Libp2p>(args: {
+  export function createOrbitDB<T extends Libp2p = Libp2p<DefaultLibp2pServices>>(args: {
     ipfs: HeliaLibp2p<T>;
     id?: string;
     identity?: Identity;
@@ -36,7 +36,7 @@ declare module "@orbitdb/core" {
     referencesCount: number;
   }>;
 
-  type CreateDatabaseArgs<T extends Libp2p = Libp2p> = {
+  type CreateDatabaseArgs<T extends Libp2p = Libp2p<DefaultLibp2pServices>> = {
     ipfs: HeliaLibp2p<T>;
     identity?: Identity;
     address: string;
@@ -139,7 +139,7 @@ declare module "@orbitdb/core" {
     ) => Promise<boolean>;
   };
 
-  export type OrbitDB<T extends Libp2p = Libp2p> = {
+  export type OrbitDB<T extends Libp2p = Libp2p<DefaultLibp2pServices>> = {
     id: string;
     open: (
       address: string,
@@ -250,7 +250,7 @@ declare module "@orbitdb/core" {
     }
   >;
 
-  export function Identities<T extends Libp2p = Libp2p>(args: {
+  export function Identities<T extends Libp2p = Libp2p<DefaultLibp2pServices>>(args: {
     keystore?: KeyStoreType;
     path?: string;
     storage?: Storage;
@@ -289,7 +289,7 @@ declare module "@orbitdb/core" {
     put: (hash: string, data: unknown) => Promise<void>; // Todo: check if DagCborEncodable is appropriate here
     get: (hash: string) => Promise<unknown>;
   };
-  export function IPFSBlockStorage<T extends Libp2p = Libp2p>(args: {
+  export function IPFSBlockStorage<T extends Libp2p = Libp2p<DefaultLibp2pServices>>(args: {
     ipfs: HeliaLibp2p<T>;
     pin?: boolean;
     timeout?: number;
