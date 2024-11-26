@@ -62,7 +62,7 @@ declare module "@orbitdb/core" {
     meta: MetaData;
     close: () => Promise<void>;
     drop: () => Promise<void>;
-    addOperation: (bytes: ArrayBuffer) => Promise<string>;
+    addOperation: (op: DagCborEncodable) => Promise<string>;
     log: Log;
     sync: Sync;
     peers: string[];
