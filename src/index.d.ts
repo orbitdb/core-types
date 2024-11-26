@@ -6,16 +6,16 @@ declare module "@orbitdb/core" {
   import type { PrivateKey } from "@libp2p/interface";
   import type { CID } from "multiformats";
 
-  export function createOrbitDB<T extends Libp2p = Libp2p>(args: {
+  export type createOrbitDB = <T extends Libp2p = Libp2p>(args: {
     ipfs: HeliaLibp2p<T>;
     id?: string;
     identity?: Identity;
-    identities?: typeof Identities;
+    identities?: IdentitiesType;
     directory?: string;
-  }): Promise<OrbitDB>;
+  }) => Promise<OrbitDB>;
 
   export type DatabaseEvents = {
-    update: (entry: Entry) => void;
+    update: (entry: LogEntry) => void;
     close: () => void;
     drop: () => void;
     join: (peerId: PeerId, heads: Log[]) => void;
@@ -37,7 +37,7 @@ declare module "@orbitdb/core" {
     indexStorage?: Storage;
     referencesCount?: number;
     syncAutomatically?: boolean;
-    onUpdate?: (log: Log, entry: Entry) => void;
+    onUpdate?: (log: Log, entry: LogEntry) => void;
   };
 
   export type BaseDatabase = {
@@ -55,9 +55,9 @@ declare module "@orbitdb/core" {
     access: AccessController;
   };
 
-  export function Documents<T extends string = "_id">(args?: {
+  export type Documents = <T extends string = "_id">(args?: {
     indexBy: T;
-  }): (args: CreateDatabaseArgs) => Promise<
+  }) => (args: CreateDatabaseArgs) => Promise<
     BaseDatabase & {
       type: "documents";
       put: (doc: { [key: string]: string }) => Promise<void>;
@@ -77,6 +77,8 @@ declare module "@orbitdb/core" {
     }
   >;
 
+  export type DocumentsDatabase = ReturnType<Awaited<ReturnType<Documents>>>;
+
   export type KeyValue = () => (args: CreateDatabaseArgs) => Promise<
     BaseDatabase & {
       type: "keyvalue";
@@ -89,6 +91,8 @@ declare module "@orbitdb/core" {
   >;
 
   export type KeyValueIndexed = KeyValue;
+
+  export type KeyValueDatabase = ReturnType<Awaited<ReturnType<KeyValue>>>;
 
   export function Database(args: CreateDatabaseArgs): Promise<BaseDatabase>;
 
@@ -119,6 +123,7 @@ declare module "@orbitdb/core" {
     indexStorage: Storage;
     referencesCount: number;
   }>;
+
   export type OrbitDB = {
     id: string;
     open: (
@@ -134,12 +139,14 @@ declare module "@orbitdb/core" {
     peerId: PeerId;
   };
 
-  export function useAccessController(accessController: AccessController): void;
+  export type useAccessController = (
+    accessController: AccessController,
+  ) => void;
 
-  export function parseAddress(
+  export type parseAddress = (
     address: OrbitDBAddress | string,
-  ): OrbitDBAddress;
-  export function isValidAddress(address: unknown): boolean;
+  ) => OrbitDBAddress;
+  export type isValidAddress = (address: unknown) => boolean;
 
   export type OrbitDBAddress = {
     protocol: string;
@@ -155,7 +162,7 @@ declare module "@orbitdb/core" {
     traverse: () => AsyncGenerator<LogEntry, void, unknown>;
   };
 
-  type DagCborEncodable =
+  export type DagCborEncodable =
     | string
     | number
     | null
@@ -163,32 +170,21 @@ declare module "@orbitdb/core" {
     | DagCborEncodable[]
     | { [key: string]: DagCborEncodable };
 
-  export type Entry = {
-    id: string;
-    // Payload must be dag-cbor encodable (todo: perhaps import a formal type for this)
-    // See https://github.com/orbitdb/orbitdb/blob/main/src/oplog/entry.js#L68C28-L68C36
-    payload: DagCborEncodable;
-    next: string[];
-    refs: string[];
-    clock: Clock;
-    v: 2;
-  };
-
   export type SyncEvents = {
-    join: (peerId: PeerId, heads: Entry[]) => void;
+    join: (peerId: PeerId, heads: LogEntry[]) => void;
     leave: (peerId: PeerId) => void;
     error: (error: Error) => void;
   };
 
   export type Sync = {
-    add: (entry: Entry) => Promise<void>;
+    add: (entry: LogEntry) => Promise<void>;
     stop: () => Promise<void>;
     start: () => Promise<void>;
     events: TypedEmitter<SyncEvents>;
     peers: Set<string>;
   };
 
-  export function AccessControllerGenerator({
+  export type AccessControllerGenerator = ({
     orbitdb,
     identities,
     address,
@@ -196,20 +192,20 @@ declare module "@orbitdb/core" {
     orbitdb: OrbitDB;
     identities: IdentitiesType;
     address?: string;
-  }): Promise<AccessController>;
+  }) => Promise<AccessController>;
 
-  export class AccessController {
+  export type AccessController = {
     type: string;
     address: string;
     canAppend: (entry: LogEntry) => Promise<boolean>;
-  }
+  };
 
-  export function useDatabaseType(type: { type: string }): void;
+  export type useDatabaseType = (type: { type: string }) => void;
 
-  export function IPFSAccessController(args?: {
+  export type IPFSAccessController = (args?: {
     write?: string[];
     storage?: Storage;
-  }): (args: {
+  }) => (args: {
     orbitdb: OrbitDB;
     identities: IdentitiesType;
     address: string;
@@ -220,7 +216,9 @@ declare module "@orbitdb/core" {
     }
   >;
 
-  export function OrbitDBAccessController(args?: { write?: string[] }): (args: {
+  export type OrbitDBAccessController = (args?: {
+    write?: string[];
+  }) => (args: {
     orbitdb: OrbitDB;
     identities: IdentitiesType;
     address: string;
@@ -239,13 +237,12 @@ declare module "@orbitdb/core" {
     }
   >;
 
-  export function Identities(args: {
+  export type Identities = (args: {
     keystore?: KeyStoreType;
     path?: string;
     storage?: Storage;
     ipfs?: HeliaLibp2p;
-  }): Promise<IdentitiesType>;
-  export class IdentitiesType {
+  }) => Promise<{
     createIdentity: (options: object) => Promise<Identity>;
     getIdentity: (hash: string) => Promise<Identity>;
     verifyIdentity: (identity: Identity) => Promise<boolean>;
@@ -256,8 +253,11 @@ declare module "@orbitdb/core" {
       data: string,
     ) => Promise<string>;
     keystore: KeyStoreType;
-  }
-  export const Entry: {
+  }>;
+
+  export type IdentitiesType = Awaited<ReturnType<Identities>>;
+
+  export type Entry = {
     create: (
       identity: Identity,
       id: string,
@@ -271,25 +271,28 @@ declare module "@orbitdb/core" {
     isEntry: (obj: object) => boolean;
     isEqual: (a: LogEntry, b: LogEntry) => boolean;
   };
-  export class Storage {
+
+  export type Storage = {
     put: (hash: string, data: DagCborEncodable) => Promise<void>; // Todo: check if DagCborEncodable is appropriate here
     get: (hash: string) => Promise<void>;
-  }
-  export function IPFSBlockStorage(args: {
+  };
+  export type IPFSBlockStorage = (args: {
     ipfs: HeliaLibp2p;
     pin?: boolean;
     timeout?: number;
-  }): Promise<Storage>;
-  export function LRUStorage(args: { size: number }): Promise<Storage>;
-  export function ComposedStorage(...args: Storage[]): Promise<Storage>;
+  }) => Promise<Storage>;
+  export type LRUStorage = (args: { size: number }) => Promise<Storage>;
+  export type ComposedStorage = (...args: Storage[]) => Promise<Storage>;
 
   export type Clock = {
     id: string;
     time: number;
   };
 
-  export type LogEntry<T = unknown> = {
+  export type LogEntry<T extends DagCborEncodable = DagCborEncodable> = {
     id: string;
+    // Payload must be dag-cbor encodable (todo: perhaps import a formal type for this)
+    // See https://github.com/orbitdb/orbitdb/blob/main/src/oplog/entry.js#L68C28-L68C36
     payload: { op: string; key: string | null; value?: T };
     next: string[];
     refs: string[];
@@ -301,10 +304,10 @@ declare module "@orbitdb/core" {
     hash: string;
   };
 
-  export function KeyStore(args: {
+  export type KeyStore = (args: {
     storage?: Storage;
     path?: string;
-  }): Promise<KeyStoreType>;
+  }) => Promise<KeyStoreType>;
 
   export type KeyStoreType = {
     clear: () => Promise<void>;
