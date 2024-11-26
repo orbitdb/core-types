@@ -24,6 +24,18 @@ declare module "@orbitdb/core" {
 
   export type MetaData = { [key: string]: string | number | boolean }; // Todo: check
 
+  type  OpenDatabaseArgs = Partial<{
+    type: string;
+    meta: MetaData;
+    sync: boolean;
+    Database: DatabaseGenerator; // TODO - see https://github.com/orbitdb/orbitdb/blob/main/src/orbitdb.js#L148
+    AccessController: AccessController;
+    headsStorage: Storage;
+    entryStorage: Storage;
+    indexStorage: Storage;
+    referencesCount: number;
+  }>;
+
   type CreateDatabaseArgs = {
     ipfs: HeliaLibp2p;
     identity?: Identity;
@@ -54,6 +66,8 @@ declare module "@orbitdb/core" {
     events: TypedEmitter<DatabaseEvents>;
     access: AccessController;
   };
+
+  export type DatabaseGenerator = (args: CreateDatabaseArgs) => BaseDatabase;
 
   export function Documents<T extends string = "_id">(args?: {
     indexBy: T;
@@ -129,7 +143,7 @@ declare module "@orbitdb/core" {
     id: string;
     open: (
       address: string,
-      options?: CreateDatabaseArgs,
+      options?: OpenDatabaseArgs,
     ) => ReturnType<typeof Database>;
     stop: () => Promise<void>;
     ipfs: HeliaLibp2p<T>;
