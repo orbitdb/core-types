@@ -184,6 +184,7 @@ declare module "@orbitdb/core" {
     | string
     | number
     | null
+    | boolean
     | CID
     | DagCborEncodable[]
     | { [key: string]: DagCborEncodable };
