@@ -2,7 +2,7 @@
   "name": "@orbitdb/core-types",
   "version": "1.0.1",
   "description": "Official typings for OrbitDB",
-  "types": "index.d.ts",
+  "types": "src/index.d.ts",
   "type": "module",
   "repository": {
     "type": "git",
