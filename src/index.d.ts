@@ -14,7 +14,7 @@ declare module "@orbitdb/core" {
     identity?: Identity;
     identities?: IdentitiesType;
     directory?: string;
-  }): Promise<OrbitDB>;
+  }): Promise<OrbitDB<T>>;
 
   export type DatabaseEvents = {
     update: (entry: LogEntry) => void;
@@ -204,8 +204,7 @@ declare module "@orbitdb/core" {
   };
 
   export function AccessControllerGenerator(args: {
-    write: string[];
-    storage: Storage;
+    storage?: Storage;
   }): (args: {
     orbitdb: OrbitDB;
     identities: IdentitiesType;
