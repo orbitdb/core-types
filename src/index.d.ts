@@ -6,7 +6,9 @@ declare module "@orbitdb/core" {
   import type { PrivateKey } from "@libp2p/interface";
   import type { ByteView, CID } from "multiformats";
 
-  export function createOrbitDB<T extends Libp2p = Libp2p<DefaultLibp2pServices>>(args: {
+  export function createOrbitDB<
+    T extends Libp2p = Libp2p<DefaultLibp2pServices>,
+  >(args: {
     ipfs: HeliaLibp2p<T>;
     id?: string;
     identity?: Identity;
@@ -250,7 +252,9 @@ declare module "@orbitdb/core" {
     }
   >;
 
-  export function Identities<T extends Libp2p = Libp2p<DefaultLibp2pServices>>(args: {
+  export function Identities<
+    T extends Libp2p = Libp2p<DefaultLibp2pServices>,
+  >(args: {
     keystore?: KeyStoreType;
     path?: string;
     storage?: Storage;
@@ -271,7 +275,7 @@ declare module "@orbitdb/core" {
   export type IdentitiesType = Awaited<ReturnType<typeof Identities>>;
 
   export namespace Entry {
-    function create (
+    function create(
       identity: Identity,
       id: string,
       payload: unknown,
@@ -279,17 +283,22 @@ declare module "@orbitdb/core" {
       next?: string[],
       refs?: string[],
     ): Promise<LogEntry>;
-    function verify (identities: IdentitiesType, entry: LogEntry): Promise<boolean>;
-    function decode (bytes: Uint8Array): Promise<LogEntry>;
-    function isEntry (obj: object): boolean;
-    function isEqual (a: LogEntry, b: LogEntry): boolean;
+    function verify(
+      identities: IdentitiesType,
+      entry: LogEntry,
+    ): Promise<boolean>;
+    function decode(bytes: Uint8Array): Promise<LogEntry>;
+    function isEntry(obj: object): boolean;
+    function isEqual(a: LogEntry, b: LogEntry): boolean;
   }
 
   export type Storage = {
     put: (hash: string, data: unknown) => Promise<void>; // Todo: check if DagCborEncodable is appropriate here
     get: (hash: string) => Promise<ByteView<unknown>>;
   };
-  export function IPFSBlockStorage<T extends Libp2p = Libp2p<DefaultLibp2pServices>>(args: {
+  export function IPFSBlockStorage<
+    T extends Libp2p = Libp2p<DefaultLibp2pServices>,
+  >(args: {
     ipfs: HeliaLibp2p<T>;
     pin?: boolean;
     timeout?: number;
