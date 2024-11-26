@@ -18,7 +18,7 @@
   "bugs": {
     "url": "https://github.com/orbitdb/core-types/issues"
   },
-  "homepage": "https://github.com/reseau-constellationn/orbit-db-types#readme",
+  "homepage": "https://github.com/orbitdb/core-types#readme",
   "scripts": {
     "test": "pnpm tsc -p tsconfig.json",
     "format": "pnpm prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\" && pnpm eslint . --fix",
