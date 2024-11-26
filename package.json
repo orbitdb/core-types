@@ -1,12 +1,12 @@
 {
   "name": "@orbitdb/core-types",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Official typings for OrbitDB",
   "types": "index.d.ts",
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/reseau-constellation/orbit-db-types.git"
+    "url": "git+https://github.com/orbitdb/core-types.git"
   },
   "keywords": [
     "@types",
@@ -16,7 +16,7 @@
   "author": "lukas2005; Julien Jean Malard-Adam",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/reseau-constellation/orbit-db-types/issues"
+    "url": "https://github.com/orbitdb/core-types/issues"
   },
   "homepage": "https://github.com/reseau-constellationn/orbit-db-types#readme",
   "scripts": {
