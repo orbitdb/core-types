@@ -24,7 +24,7 @@
     "emitDeclarationOnly": true,
     "skipLibCheck": false,
     "experimentalDecorators": true,
-    "importsNotUsedAsValues": "remove",
+    "importsNotUsedAsValues": "remove"
   },
   "include": ["src", "@types"]
 }

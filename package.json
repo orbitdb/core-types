@@ -21,15 +21,21 @@
   "homepage": "https://github.com/reseau-constellationn/orbit-db-types#readme",
   "scripts": {
     "test": "pnpm tsc -p tsconfig.json",
-    "release": "pnpm test && pnpm publish --access public"
+    "format": "pnpm prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\" && pnpm eslint . --fix",
+    "release": "pnpm test && pnpm format && pnpm publish --access public"
   },
   "devDependencies": {
     "@libp2p/interface": "^2.2.1",
     "@orbitdb/core": "^2.4.3",
     "@types/elliptic": "^6.4.18",
     "@types/events": "^3.0.3",
+    "eslint": "^9.15.0",
+    "globals": "^15.12.0",
     "helia": "^5.1.1",
+    "multiformats": "^13.3.1",
+    "prettier": "^3.4.0",
     "tiny-typed-emitter": "^2.1.0",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.16.0"
   }
 }
