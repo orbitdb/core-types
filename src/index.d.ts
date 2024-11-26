@@ -31,7 +31,7 @@ declare module "@orbitdb/core" {
     meta: MetaData;
     sync: boolean;
     Database: DatabaseGenerator; // TODO - see https://github.com/orbitdb/orbitdb/blob/main/src/orbitdb.js#L148
-    AccessController: ReturnType<typeof AccessControllerGenerator>;
+    AccessController: typeof AccessControllerGenerator;
     headsStorage: Storage;
     entryStorage: Storage;
     indexStorage: Storage;
@@ -158,7 +158,7 @@ declare module "@orbitdb/core" {
   };
 
   export function useAccessController(
-    accessController: typeof AccessControllerGenerator,
+    accessController: typeof AccessControllerSpecifier,
   ): void;
 
   export function parseAddress(
@@ -203,13 +203,15 @@ declare module "@orbitdb/core" {
     peers: Set<string>;
   };
 
-  export function AccessControllerGenerator(args: {
+  export function AccessControllerSpecifier(args: {
     storage?: Storage;
-  }): (args: {
+  }): typeof AccessControllerGenerator;
+
+  export function AccessControllerGenerator(args: {
     orbitdb: OrbitDB;
     identities: IdentitiesType;
     address?: string;
-  }) => Promise<AccessController>;
+  }): Promise<AccessController>;
 
   export type AccessController = {
     type: string;
