@@ -125,23 +125,11 @@ declare module "@orbitdb/core" {
     ) => Promise<boolean>;
   };
 
-  export type OrbitDBDatabaseOptions = Partial<{
-    type: string;
-    meta: MetaData;
-    sync: Sync;
-    Database: BaseDatabase;
-    AccessController: AccessController;
-    headsStorage: Storage;
-    entryStorage: Storage;
-    indexStorage: Storage;
-    referencesCount: number;
-  }>;
-
   export type OrbitDB = {
     id: string;
     open: (
       address: string,
-      options?: OrbitDBDatabaseOptions,
+      options?: CreateDatabaseArgs,
     ) => ReturnType<typeof Database>;
     stop: () => Promise<void>;
     ipfs: HeliaLibp2p;
@@ -282,8 +270,8 @@ declare module "@orbitdb/core" {
   };
 
   export type Storage = {
-    put: (hash: string, data: DagCborEncodable) => Promise<void>; // Todo: check if DagCborEncodable is appropriate here
-    get: (hash: string) => Promise<void>;
+    put: (hash: string, data: unknown) => Promise<void>; // Todo: check if DagCborEncodable is appropriate here
+    get: (hash: string) => Promise<unknown>;
   };
   export function IPFSBlockStorage(args: {
     ipfs: HeliaLibp2p;
