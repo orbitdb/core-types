@@ -140,7 +140,9 @@ declare module "@orbitdb/core" {
     peerId: PeerId;
   };
 
-  export function useAccessController(accessController: typeof AccessControllerGenerator): void;
+  export function useAccessController(
+    accessController: typeof AccessControllerGenerator,
+  ): void;
 
   export function parseAddress(
     address: OrbitDBAddress | string,
