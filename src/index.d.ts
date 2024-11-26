@@ -31,7 +31,7 @@ declare module "@orbitdb/core" {
     meta: MetaData;
     sync: boolean;
     Database: DatabaseGenerator; // TODO - see https://github.com/orbitdb/orbitdb/blob/main/src/orbitdb.js#L148
-    AccessController: AccessController;
+    AccessController: ReturnType<typeof AccessControllerGenerator>;
     headsStorage: Storage;
     entryStorage: Storage;
     indexStorage: Storage;
