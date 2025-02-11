@@ -25,11 +25,13 @@
     "release": "pnpm test && pnpm format && pnpm publish --access public"
   },
   "devDependencies": {
+    "@eslint/js": "^9.20.0",
     "@libp2p/interface": "^2.5.0",
     "@orbitdb/core": "^2.4.3",
     "@types/elliptic": "^6.4.18",
     "@types/events": "^3.0.3",
     "eslint": "^9.20.0",
+    "eslint-plugin-import": "^2.31.0",
     "globals": "^15.14.0",
     "helia": "^5.2.0",
     "multiformats": "^13.3.2",
