@@ -1,12 +1,15 @@
 declare module "@orbitdb/core" {
   import type { HeliaLibp2p } from "helia";
-  import type { Libp2p, PeerId, PrivateKey, ServiceMap } from "@libp2p/interface";
+  import type {
+    Libp2p,
+    PeerId,
+    PrivateKey,
+    ServiceMap,
+  } from "@libp2p/interface";
   import type { TypedEmitter } from "tiny-typed-emitter";
   import type { ByteView, CID } from "multiformats";
 
-  export function createOrbitDB<
-    T extends ServiceMap = ServiceMap,
-  >(args: {
+  export function createOrbitDB<T extends ServiceMap = ServiceMap>(args: {
     ipfs: HeliaLibp2p<Libp2p<T>>;
     id?: string;
     identity?: Identity;
@@ -36,22 +39,21 @@ declare module "@orbitdb/core" {
     referencesCount: number;
   }>;
 
-  type CreateDatabaseOptions<T extends ServiceMap = ServiceMap> =
-    {
-      ipfs: HeliaLibp2p<Libp2p<T>>;
-      identity?: Identity;
-      address: string;
-      name?: string;
-      access?: AccessController;
-      directory?: string;
-      meta?: MetaData;
-      headsStorage?: Storage;
-      entryStorage?: Storage;
-      indexStorage?: Storage;
-      referencesCount?: number;
-      syncAutomatically?: boolean;
-      onUpdate?: (log: Log, entry: LogEntry) => void;
-    };
+  type CreateDatabaseOptions<T extends ServiceMap = ServiceMap> = {
+    ipfs: HeliaLibp2p<Libp2p<T>>;
+    identity?: Identity;
+    address: string;
+    name?: string;
+    access?: AccessController;
+    directory?: string;
+    meta?: MetaData;
+    headsStorage?: Storage;
+    entryStorage?: Storage;
+    indexStorage?: Storage;
+    referencesCount?: number;
+    syncAutomatically?: boolean;
+    onUpdate?: (log: Log, entry: LogEntry) => void;
+  };
 
   export type BaseDatabase = {
     address: string;
@@ -252,9 +254,7 @@ declare module "@orbitdb/core" {
     }
   >;
 
-  export function Identities<
-    T extends ServiceMap = ServiceMap,
-  >(args: {
+  export function Identities<T extends ServiceMap = ServiceMap>(args: {
     keystore?: KeyStoreType;
     path?: string;
     storage?: Storage;
@@ -296,9 +296,7 @@ declare module "@orbitdb/core" {
     put: (hash: string, data: unknown) => Promise<void>; // Todo: check if DagCborEncodable is appropriate here
     get: (hash: string) => Promise<ByteView<unknown>>;
   };
-  export function IPFSBlockStorage<
-    T extends ServiceMap = ServiceMap,
-  >(args: {
+  export function IPFSBlockStorage<T extends ServiceMap = ServiceMap>(args: {
     ipfs: HeliaLibp2p<Libp2p<T>>;
     pin?: boolean;
     timeout?: number;
