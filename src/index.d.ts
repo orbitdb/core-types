@@ -65,7 +65,7 @@ declare module "@orbitdb/core" {
     addOperation: (op: DagCborEncodable) => Promise<string>;
     log: Log;
     sync: Sync;
-    peers: string[];
+    peers: Set<string>;
     events: TypedEmitter<DatabaseEvents>;
     access: AccessController;
   };
