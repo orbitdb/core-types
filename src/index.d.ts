@@ -7,7 +7,7 @@ declare module "@orbitdb/core" {
     ServiceMap,
   } from "@libp2p/interface";
   import type { TypedEmitter } from "tiny-typed-emitter";
-  import type { ByteView, CID } from "multiformats";
+  import type { ByteView } from "multiformats";
 
   export function createOrbitDB<T extends ServiceMap = ServiceMap>(args: {
     ipfs: HeliaLibp2p<Libp2p<T>>;
@@ -185,7 +185,6 @@ declare module "@orbitdb/core" {
     | number
     | null
     | boolean
-    | CID
     | DagCborEncodable[]
     | { [key: string]: DagCborEncodable };
 
