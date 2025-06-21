@@ -71,10 +71,16 @@ declare module "@orbitdb/core" {
     access: AccessController;
   };
 
-  export type DatabaseGenerator<T extends BaseDatabase = BaseDatabase> = (args: CreateDatabaseOptions) => Promise<T>;
-  export type DatabaseFromGenerator<T> = T extends DatabaseGenerator<infer D> ? D : never
-  export type DatabaseGeneratorInitialiser<T extends BaseDatabase = BaseDatabase> = () => DatabaseGenerator<T>;
-  export type DatabaseFromGeneratorInitialiser<T> = T extends DatabaseGeneratorInitialiser<infer D> ? D : never
+  export type DatabaseGenerator<T extends BaseDatabase = BaseDatabase> = (
+    args: CreateDatabaseOptions,
+  ) => Promise<T>;
+  export type DatabaseFromGenerator<T> =
+    T extends DatabaseGenerator<infer D> ? D : never;
+  export type DatabaseGeneratorInitialiser<
+    T extends BaseDatabase = BaseDatabase,
+  > = () => DatabaseGenerator<T>;
+  export type DatabaseFromGeneratorInitialiser<T> =
+    T extends DatabaseGeneratorInitialiser<infer D> ? D : never;
 
   export function Documents<T extends string = "_id">(args?: {
     indexBy: T;
@@ -98,7 +104,9 @@ declare module "@orbitdb/core" {
     }
   >;
 
-  export type DocumentsDatabase = DatabaseFromGeneratorInitialiser<typeof Documents>;
+  export type DocumentsDatabase = DatabaseFromGeneratorInitialiser<
+    typeof Documents
+  >;
 
   export function KeyValue(): (args: CreateDatabaseOptions) => Promise<
     BaseDatabase & {
@@ -122,7 +130,9 @@ declare module "@orbitdb/core" {
     }
   >;
 
-  export type KeyValueDatabase = DatabaseFromGeneratorInitialiser<typeof KeyValue>;
+  export type KeyValueDatabase = DatabaseFromGeneratorInitialiser<
+    typeof KeyValue
+  >;
 
   export type Identity = {
     id: string;
@@ -142,10 +152,7 @@ declare module "@orbitdb/core" {
 
   export type OrbitDB<T extends ServiceMap = ServiceMap> = {
     id: string;
-    open: (
-      address: string,
-      options?: OpenDatabaseOptions,
-    ) => BaseDatabase;
+    open: (address: string, options?: OpenDatabaseOptions) => BaseDatabase;
     stop: () => Promise<void>;
     ipfs: HeliaLibp2p<Libp2p<T>>;
     directory: string;
