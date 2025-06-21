@@ -31,7 +31,7 @@ declare module "@orbitdb/core" {
     type: string;
     meta: MetaData;
     sync: boolean;
-    Database: DatabaseGenerator; // TODO - see https://github.com/orbitdb/orbitdb/blob/main/src/orbitdb.js#L148
+    Database: BaseDatabase | DatabaseGenerator; // See https://github.com/orbitdb/orbitdb/blob/main/src/orbitdb.js#L149
     AccessController: typeof AccessControllerGenerator;
     headsStorage: Storage;
     entryStorage: Storage;
@@ -63,6 +63,7 @@ declare module "@orbitdb/core" {
     close: () => Promise<void>;
     drop: () => Promise<void>;
     addOperation: (op: DagCborEncodable) => Promise<string>;
+    all: () => Promise<unknown>;
     log: Log;
     sync: Sync;
     peers: Set<string>;
@@ -70,7 +71,10 @@ declare module "@orbitdb/core" {
     access: AccessController;
   };
 
-  export type DatabaseGenerator = (args: CreateDatabaseOptions) => BaseDatabase;
+  export type DatabaseGenerator<T extends BaseDatabase = BaseDatabase> = (args: CreateDatabaseOptions) => Promise<T>;
+  export type DatabaseFromGenerator<T> = T extends DatabaseGenerator<infer D> ? D : never
+  export type DatabaseGeneratorInitialiser<T extends BaseDatabase = BaseDatabase> = () => DatabaseGenerator<T>;
+  export type DatabaseFromGeneratorInitialiser<T> = T extends DatabaseGeneratorInitialiser<infer D> ? D : never
 
   export function Documents<T extends string = "_id">(args?: {
     indexBy: T;
@@ -94,9 +98,7 @@ declare module "@orbitdb/core" {
     }
   >;
 
-  export type DocumentsDatabase = Awaited<
-    ReturnType<Awaited<ReturnType<typeof Documents>>>
-  >;
+  export type DocumentsDatabase = DatabaseFromGeneratorInitialiser<typeof Documents>;
 
   export function KeyValue(): (args: CreateDatabaseOptions) => Promise<
     BaseDatabase & {
@@ -120,11 +122,7 @@ declare module "@orbitdb/core" {
     }
   >;
 
-  export type KeyValueDatabase = Awaited<
-    ReturnType<Awaited<ReturnType<typeof KeyValue>>>
-  >;
-
-  export function Database(args: CreateDatabaseOptions): Promise<BaseDatabase>;
+  export type KeyValueDatabase = DatabaseFromGeneratorInitialiser<typeof KeyValue>;
 
   export type Identity = {
     id: string;
@@ -147,7 +145,7 @@ declare module "@orbitdb/core" {
     open: (
       address: string,
       options?: OpenDatabaseOptions,
-    ) => ReturnType<typeof Database>;
+    ) => BaseDatabase;
     stop: () => Promise<void>;
     ipfs: HeliaLibp2p<Libp2p<T>>;
     directory: string;
