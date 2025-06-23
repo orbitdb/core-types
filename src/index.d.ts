@@ -70,8 +70,10 @@ declare module "@orbitdb/core" {
     events: TypedEmitter<DatabaseEvents>;
     access: AccessController;
   };
-  export function Database(args: CreateDatabaseOptions): Promise<InternalDatabase>;
-  
+  export function Database(
+    args: CreateDatabaseOptions,
+  ): Promise<InternalDatabase>;
+
   export type BaseDatabase = InternalDatabase & { type: string };
 
   export type DatabaseGenerator<T extends BaseDatabase = BaseDatabase> = (
