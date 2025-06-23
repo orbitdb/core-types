@@ -55,7 +55,7 @@ declare module "@orbitdb/core" {
     onUpdate?: (log: Log, entry: LogEntry) => void;
   };
 
-  export type BaseDatabase = {
+  export type InternalDatabase = {
     address: string;
     name: string;
     identity: Identity;
@@ -70,7 +70,9 @@ declare module "@orbitdb/core" {
     events: TypedEmitter<DatabaseEvents>;
     access: AccessController;
   };
-  export function Database(args: CreateDatabaseOptions): Promise<BaseDatabase>;
+  export function Database(args: CreateDatabaseOptions): Promise<InternalDatabase>;
+  
+  export type BaseDatabase = InternalDatabase & { type: string };
 
   export type DatabaseGenerator<T extends BaseDatabase = BaseDatabase> = (
     args: CreateDatabaseOptions,
@@ -79,7 +81,7 @@ declare module "@orbitdb/core" {
     T extends DatabaseGenerator<infer D> ? D : never;
   export type DatabaseGeneratorInitialiser<
     T extends BaseDatabase = BaseDatabase,
-  > = () => DatabaseGenerator<T>;
+  > = { type: T["type"] } & (() => DatabaseGenerator<T>);
   export type DatabaseFromGeneratorInitialiser<T> =
     T extends DatabaseGeneratorInitialiser<infer D> ? D : never;
 
