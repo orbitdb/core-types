@@ -157,7 +157,7 @@ declare module "@orbitdb/core" {
 
   export type OrbitDB<T extends ServiceMap = ServiceMap> = {
     id: string;
-    open: (address: string, options?: OpenDatabaseOptions) => BaseDatabase;
+    open: (address: string, options?: OpenDatabaseOptions) => Promise<BaseDatabase>;
     stop: () => Promise<void>;
     ipfs: HeliaLibp2p<Libp2p<T>>;
     directory: string;
