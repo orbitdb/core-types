@@ -108,13 +108,15 @@ declare module "@orbitdb/core" {
       all: [string, string, { [key: string]: string }][]; // TODO: see above comment on `iterator`
     }
   >;
-  export namespace Documents { export const type = "documents" }
+  export namespace Documents {
+    export const type = "documents";
+  }
 
   export type DocumentsDatabase = DatabaseFromGeneratorInitialiser<
     typeof Documents
   >;
 
-  export function KeyValue(): ((args: CreateDatabaseOptions) => Promise<
+  export function KeyValue(): (args: CreateDatabaseOptions) => Promise<
     BaseDatabase & {
       type: "keyvalue";
       put(key: string, value: unknown): Promise<string>;
@@ -123,8 +125,10 @@ declare module "@orbitdb/core" {
       get(key: string): Promise<unknown | undefined>;
       all(): Promise<{ key: string; value: unknown; hash: string }[]>;
     }
-  >);
-  export namespace KeyValue { export const type = "keyvalue" }
+  >;
+  export namespace KeyValue {
+    export const type = "keyvalue";
+  }
 
   export function KeyValueIndexed(): (args: CreateDatabaseOptions) => Promise<
     BaseDatabase & {
@@ -136,8 +140,9 @@ declare module "@orbitdb/core" {
       all(): Promise<{ key: string; value: unknown; hash: string }[]>;
     }
   >;
-  export namespace KeyValueIndexed { export const type = "keyvalue" }
-
+  export namespace KeyValueIndexed {
+    export const type = "keyvalue";
+  }
 
   export type KeyValueDatabase = DatabaseFromGeneratorInitialiser<
     typeof KeyValue
