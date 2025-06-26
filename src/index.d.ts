@@ -248,7 +248,7 @@ declare module "@orbitdb/core" {
   }): (args: {
     orbitdb: OrbitDB;
     identities: IdentitiesType;
-    address: string;
+    address?: string;
   }) => Promise<
     AccessController & {
       type: "ipfs";
@@ -259,8 +259,8 @@ declare module "@orbitdb/core" {
   export function OrbitDBAccessController(args?: { write?: string[] }): (args: {
     orbitdb: OrbitDB;
     identities: IdentitiesType;
-    address: string;
-    name: string;
+    address?: string;
+    name?: string;
   }) => Promise<
     AccessController & {
       type: "orbitdb";
