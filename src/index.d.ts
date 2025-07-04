@@ -197,9 +197,21 @@ declare module "@orbitdb/core" {
 
   export type Log = {
     id: string;
-    clock: Clock;
+    clock: () => Promise<Clock>;
     heads: () => Promise<LogEntry[]>;
-    traverse: () => AsyncGenerator<LogEntry, void, unknown>;
+    values: () => Promise<LogEntry[]>;
+    get: (hash: string) => Promise<LogEntry>;
+    has: (hash: string) => Promise<boolean>;
+    append: (data: DagCborEncodable, options?: { referenceCount?: number }) => Promise<LogEntry>,
+    join: (log: Log) => Promise<boolean | void>;
+    joinEntry: (entry: LogEntry) => Promise<void>;
+    traverse: (rootEntries?: LogEntry[], shouldStopFn?: () => boolean) => AsyncGenerator<LogEntry, void, unknown>;
+    iterator: (args?: { amount?: number, gt?: string, gte?: string, lt?: string, lte?: string }) => AsyncGenerator<LogEntry, void, unknown>;
+    clear: () => Promise<void>;
+    close: () => Promise<void>;
+    access: AccessController;
+    identity: Identity;
+    storage: Storage;
   };
 
   export type DagCborEncodable =
