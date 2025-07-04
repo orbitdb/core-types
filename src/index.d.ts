@@ -202,11 +202,23 @@ declare module "@orbitdb/core" {
     values: () => Promise<LogEntry[]>;
     get: (hash: string) => Promise<LogEntry>;
     has: (hash: string) => Promise<boolean>;
-    append: (data: DagCborEncodable, options?: { referenceCount?: number }) => Promise<LogEntry>,
+    append: (
+      data: DagCborEncodable,
+      options?: { referenceCount?: number },
+    ) => Promise<LogEntry>;
     join: (log: Log) => Promise<boolean | void>;
     joinEntry: (entry: LogEntry) => Promise<void>;
-    traverse: (rootEntries?: LogEntry[], shouldStopFn?: () => boolean) => AsyncGenerator<LogEntry, void, unknown>;
-    iterator: (args?: { amount?: number, gt?: string, gte?: string, lt?: string, lte?: string }) => AsyncGenerator<LogEntry, void, unknown>;
+    traverse: (
+      rootEntries?: LogEntry[],
+      shouldStopFn?: () => boolean,
+    ) => AsyncGenerator<LogEntry, void, unknown>;
+    iterator: (args?: {
+      amount?: number;
+      gt?: string;
+      gte?: string;
+      lt?: string;
+      lte?: string;
+    }) => AsyncGenerator<LogEntry, void, unknown>;
     clear: () => Promise<void>;
     close: () => Promise<void>;
     access: AccessController;
