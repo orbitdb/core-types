@@ -210,7 +210,7 @@ declare module "@orbitdb/core" {
     joinEntry: (entry: LogEntry) => Promise<void>;
     traverse: (
       rootEntries?: LogEntry[],
-      shouldStopFn?: () => boolean,
+      shouldStopFn?: (entry: LogEntry) => boolean,
     ) => AsyncGenerator<LogEntry, void, unknown>;
     iterator: (args?: {
       amount?: number;
