@@ -90,7 +90,7 @@ declare module "@orbitdb/core" {
   export function Documents<T extends string = "_id">(args?: {
     indexBy: T;
   }): (args: CreateDatabaseOptions) => Promise<
-    BaseDatabase & {
+    Omit<BaseDatabase, "all"> & {
       type: "documents";
       put: (doc: { [key: string]: string }) => Promise<void>;
       del: (key: string) => Promise<void>;
@@ -117,7 +117,7 @@ declare module "@orbitdb/core" {
   >;
 
   export function KeyValue(): (args: CreateDatabaseOptions) => Promise<
-    BaseDatabase & {
+    Omit<BaseDatabase, "all"> & {
       type: "keyvalue";
       put(key: string, value: unknown): Promise<string>;
       set(key: string, value: unknown): Promise<string>;
@@ -131,7 +131,7 @@ declare module "@orbitdb/core" {
   }
 
   export function KeyValueIndexed(): (args: CreateDatabaseOptions) => Promise<
-    BaseDatabase & {
+    Omit<BaseDatabase, "all"> & {
       type: "keyvalue";
       put(key: string, value: unknown): Promise<string>;
       set(key: string, value: unknown): Promise<string>;
