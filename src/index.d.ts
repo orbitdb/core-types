@@ -17,12 +17,10 @@ declare module "@orbitdb/core" {
     directory?: string;
   }): Promise<OrbitDB<T>>;
 
-  export type DatabaseEvents = {
+  export type DatabaseEvents = SyncEvents & {
     update: (entry: LogEntry) => void;
     close: () => void;
     drop: () => void;
-    join: (peerId: PeerId, heads: Log[]) => void;
-    leave: (peerId: PeerId) => void;
   };
 
   export type MetaData = { [key: string]: string | number | boolean }; // Todo: check
