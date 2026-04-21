@@ -308,7 +308,8 @@ declare module "@orbitdb/core" {
     ipfs?: Helia<Libp2p<T>>;
   }): Promise<{
     createIdentity: (options: object) => Promise<Identity>;
-    getIdentity: (hash: string, signal?: AbortSignal) => Promise<Identity>;    verifyIdentity: (identity: Identity) => Promise<boolean>;
+    getIdentity: (hash: string, signal?: AbortSignal) => Promise<Identity>;
+    verifyIdentity: (identity: Identity) => Promise<boolean>;
     sign: (identity: Identity, data: string) => Promise<string>;
     verify: (
       signature: string,
