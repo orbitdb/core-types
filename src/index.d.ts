@@ -35,6 +35,7 @@ declare module "@orbitdb/core" {
     entryStorage: Storage;
     indexStorage: Storage;
     referencesCount: number;
+    signal?: AbortSignal;
   }>;
 
   type CreateDatabaseOptions<T extends ServiceMap = ServiceMap> = {
@@ -160,6 +161,8 @@ declare module "@orbitdb/core" {
       publicKey: string,
       data: string,
     ) => Promise<boolean>;
+    hash: string;
+    bytes: Uint8Array;
   };
 
   export type OrbitDB<T extends ServiceMap = ServiceMap> = {
@@ -254,6 +257,7 @@ declare module "@orbitdb/core" {
     orbitdb: OrbitDB;
     identities: IdentitiesType;
     address?: string;
+    signal?: AbortSignal;
   }): Promise<AccessController>;
 
   export type AccessController = {
@@ -304,14 +308,13 @@ declare module "@orbitdb/core" {
     ipfs?: Helia<Libp2p<T>>;
   }): Promise<{
     createIdentity: (options: object) => Promise<Identity>;
-    getIdentity: (hash: string) => Promise<Identity>;
-    verifyIdentity: (identity: Identity) => Promise<boolean>;
+    getIdentity: (hash: string, signal?: AbortSignal) => Promise<Identity>;    verifyIdentity: (identity: Identity) => Promise<boolean>;
     sign: (identity: Identity, data: string) => Promise<string>;
     verify: (
       signature: string,
       publicKey: string,
       data: string,
-    ) => Promise<string>;
+    ) => Promise<boolean>;
     keystore: KeyStoreType;
   }>;
 
@@ -336,8 +339,8 @@ declare module "@orbitdb/core" {
   }
 
   export type Storage = {
-    put: (hash: string, data: unknown) => Promise<void>; // Todo: check if DagCborEncodable is appropriate here
-    get: (hash: string) => Promise<ByteView<unknown>>;
+    put: (hash: string, data: unknown, signal?: AbortSignal) => Promise<void>; // Todo: check if DagCborEncodable is appropriate here
+    get: (hash: string, signal?: AbortSignal) => Promise<ByteView<unknown>>;
   };
   export function IPFSBlockStorage<T extends ServiceMap = ServiceMap>(args: {
     ipfs: Helia<Libp2p<T>>;
