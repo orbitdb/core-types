@@ -52,6 +52,7 @@ declare module "@orbitdb/core" {
     referencesCount?: number;
     syncAutomatically?: boolean;
     onUpdate?: (log: Log, entry: LogEntry) => void;
+    signal?: AbortSignal;
   };
 
   export type InternalDatabase = {
