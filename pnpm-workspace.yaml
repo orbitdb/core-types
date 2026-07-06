@@ -1,0 +1,4 @@
+allowBuilds:
+  '@ipshipyard/node-datachannel': set this to true or false
+  classic-level: true
+  node-datachannel: true

@@ -1,15 +1,14 @@
 {
   // "extends": "aegir/src/config/tsconfig.aegir.json",
   "compilerOptions": {
-    "baseUrl": ".",
     "declaration": true,
     "esModuleInterop": true,
     "incremental": true,
     "importHelpers": true,
     "jsx": "react",
     "lib": ["dom", "esnext"],
-    "module": "esnext",
-    "moduleResolution": "node",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
     "noUnusedLocals": false,
@@ -22,7 +21,7 @@
     "target": "esnext",
     "useUnknownInCatchVariables": false,
     "emitDeclarationOnly": true,
-    "skipLibCheck": false,
+    "skipLibCheck": true,
     "experimentalDecorators": true,
     "importsNotUsedAsValues": "remove"
   },
