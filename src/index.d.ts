@@ -1,5 +1,5 @@
 declare module "@orbitdb/core" {
-  import type { Helia } from "helia";
+  import type { HeliaWithLibp2p } from "@helia/libp2p";
   import type {
     Libp2p,
     PeerId,
@@ -10,7 +10,7 @@ declare module "@orbitdb/core" {
   import type { ByteView } from "multiformats";
 
   export function createOrbitDB<T extends ServiceMap = ServiceMap>(args: {
-    ipfs: Helia<Libp2p<T>>;
+    ipfs: HeliaWithLibp2p<T>;
     id?: string;
     identity?: Identity;
     identities?: IdentitiesType;
@@ -39,7 +39,7 @@ declare module "@orbitdb/core" {
   }>;
 
   type CreateDatabaseOptions<T extends ServiceMap = ServiceMap> = {
-    ipfs: Helia<Libp2p<T>>;
+    ipfs: HeliaWithLibp2p<T>;
     identity?: Identity;
     address: string;
     name?: string;
@@ -173,7 +173,7 @@ declare module "@orbitdb/core" {
       options?: OpenDatabaseOptions,
     ) => Promise<BaseDatabase>;
     stop: () => Promise<void>;
-    ipfs: Helia<Libp2p<T>>;
+    ipfs: HeliaWithLibp2p<T>;
     directory: string;
     keystore: KeyStoreType;
     identities: IdentitiesType;
@@ -306,7 +306,7 @@ declare module "@orbitdb/core" {
     keystore?: KeyStoreType;
     path?: string;
     storage?: Storage;
-    ipfs?: Helia<Libp2p<T>>;
+    ipfs?: HeliaWithLibp2p<T>;
   }): Promise<{
     createIdentity: (options: object) => Promise<Identity>;
     getIdentity: (hash: string, signal?: AbortSignal) => Promise<Identity>;
@@ -345,7 +345,7 @@ declare module "@orbitdb/core" {
     get: (hash: string, signal?: AbortSignal) => Promise<ByteView<unknown>>;
   };
   export function IPFSBlockStorage<T extends ServiceMap = ServiceMap>(args: {
-    ipfs: Helia<Libp2p<T>>;
+    ipfs: HeliaWithLibp2p<T>;
     pin?: boolean;
     timeout?: number;
   }): Promise<Storage>;

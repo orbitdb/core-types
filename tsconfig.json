@@ -23,7 +23,7 @@
     "emitDeclarationOnly": true,
     "skipLibCheck": true,
     "experimentalDecorators": true,
-    "importsNotUsedAsValues": "remove"
+    "verbatimModuleSyntax": true,
   },
-  "include": ["src", "@types"]
+  "include": ["src"]
 }
